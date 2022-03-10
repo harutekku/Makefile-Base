@@ -1,4 +1,4 @@
-# A simple starter project for developing small NASM/C/C++ programs
+# A C/C++/NASM `make` starter project
 ## Purpose
 - This, by no means, is meant to be used in large projects,
   spanning several directories with multiple dependencies
@@ -29,7 +29,8 @@
 ## Build system
 ### General info
 - Uses `make` by default with automatic dependency generation
-- The GNU compilers are the default compilers - can be switched to `clang++` or `clang-cl.exe` on Windows
+- The GNU compilers are the default compilers - can be switched to `clang` or other compiles that support
+  dependency generation
 - The Netwide Assembler is the default assembler for x86-64 assembly projects - can probably be switched to 
   other assemblers as well if they support dependency generation
 - All the compiled files are placed in the `bin` directory. After successful compilation,

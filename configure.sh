@@ -1,21 +1,15 @@
 #!/bin/bash
 
-printHelpString() {
-    echo "LOL"
-}
-
 setCFiles() {
 	[ -f "./src/main.c" ] && echo "INFO: Files already exist, skipping..." && return
 
 	cp ./.makefile ./makefile
 
-    # Create `main.c`
     printf "int main(const int argc, const char* argv[]) {\n    return 0;\n}\n" > ./src/main.c
 
-    # Edit base makefile
     sed -i -e  's/\bCOMP\b/CC/g'                                                       \
-           -e  's/CC\s*:=/CC        := g++/g'                                          \
-           -e  's/LD\s*:=/LD        := g++/g'                                          \
+           -e  's/CC\s*:=/CC        := gcc/g'                                          \
+           -e  's/LD\s*:=/LD        := gcc/g'                                          \
            -e  's/COMPFLAGS/CFLAGS/g'                                                  \
            -e  's/CFLAGS\s*:=/CFLAGS    := -c -O3 -std=c2x -Wall -Wextra -Wpedantic/g' \
            -e  's/INCEXT\s*:=/INCEXT           := h/g'                                 \
@@ -32,10 +26,9 @@ setCPPFiles() {
 
     printf "auto main(const int argc, const char* argv[]) -> int {\n    return 0;\n}\n" > ./src/main.cpp
 
-    # Edit base makefile
     sed -i -e  's/\bCOMP\b/CXX/g'                                                          \
-           -e  's/CXX\s*:=/CXX       := gcc/g'                                             \
-           -e  's/LD\s*:=/LD        := gcc/g'                                              \
+           -e  's/CXX\s*:=/CXX       := g++/g'                                             \
+           -e  's/LD\s*:=/LD        := g++/g'                                              \
            -e  's/COMPFLAGS/CXXFLAGS/g'                                                    \
            -e  's/CXXFLAGS\s*:=/CXXFLAGS  := -c -O3 -std=c++20 -Wall -Wextra -Wpedantic/g' \
            -e  's/INCEXT\s*:=/INCEXT           := hpp/g'                                   \
@@ -49,15 +42,14 @@ setCPPFiles() {
 setASMFiles() {
 	[ -f "./src/main.asm" ] && echo "INFO: Files already exist, skipping..." && return
 
-	pathToLinker=$(find / -name "ld-linux-x86-64\.so\.2" 2>/dev/null | head -n 1 -z)
+	pathToLinker=$(find / -name "ld-linux-x86-64.so.2" 2>/dev/null | head -n 1)
 
-	[ -z "$pathToLinker" ] && echo "ERROR: No suitable linker found" && exit 1
+	[ -n "$pathToLinker" ] && echo "ERROR: No suitable linker found" && exit 1
 
 	cp ./.makefile ./makefile
 
     printf "section .text\n    global _start\n\n_start:\n    mov rax,60\n    xor rdi,rdi\n    syscall" > ./src/main.asm
 
-    # Edit base makefile
     sed -i -e  's/\bCOMP\b/ASM/g'                                                       \
            -e  's/ASM\s*:=/ASM       := nasm/g'                                         \
            -e  's/LD\s*:=/LD        := ld/g'                                            \
@@ -98,8 +90,8 @@ checkIfConfigured() {
 	read answer
 
 	if [[ $answer =~ ^(Y|y|yes)$ ]]; then
-		rm -f ./src/* ./include/* ./makefile ./bin/*.o
-		cp ./.makefile makefile
+		rm -f ./src/* ./include/* ./bin/*.o
+		cp ./.makefile ./makefile
 		return
 	fi
 	exit 0
@@ -111,7 +103,6 @@ setDirectories() {
 }
 
 main() {
-    # [ "$1" = "--help" ] && printHelpString && exit 0 # TODO: Write docstring
     echo "Makefiles, v0.1"
 
 	checkIfConfigured
