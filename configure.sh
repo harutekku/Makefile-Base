@@ -1,9 +1,9 @@
 #!/bin/bash
 
 setCFiles() {
-	[ -f "./src/main.c" ] && echo "INFO: Files already exist, skipping..." && return
+    [ -f "./src/main.c" ] && echo "INFO: Files already exist, skipping..." && return
 
-	cp ./.makefile ./makefile
+    cp ./.makefile ./makefile
 
     printf "int main(const int argc, const char* argv[]) {\n    return 0;\n}\n" > ./src/main.c
 
@@ -20,9 +20,9 @@ setCFiles() {
 }
 
 setCPPFiles() {
-	[ -f "./src/main.cpp" ] && echo "INFO: Files already exist, skipping..." && return
+    [ -f "./src/main.cpp" ] && echo "INFO: Files already exist, skipping..." && return
 
-	cp ./.makefile ./makefile
+    cp ./.makefile ./makefile
 
     printf "auto main(const int argc, const char* argv[]) -> int {\n    return 0;\n}\n" > ./src/main.cpp
 
@@ -40,13 +40,13 @@ setCPPFiles() {
 
 
 setASMFiles() {
-	[ -f "./src/main.asm" ] && echo "INFO: Files already exist, skipping..." && return
+    [ -f "./src/main.asm" ] && echo "INFO: Files already exist, skipping..." && return
 
-	pathToLinker=$(find / -name "ld-linux-x86-64.so.2" 2>/dev/null | head -n 1)
+    pathToLinker=$(find / -name "ld-linux-x86-64.so.2" 2>/dev/null | head -n 1)
 
-	[ -z "$pathToLinker" ] && echo "ERROR: No suitable linker found" && exit 1
+    [ -z "$pathToLinker" ] && echo "ERROR: No suitable linker found" && exit 1
 
-	cp ./.makefile ./makefile
+    cp ./.makefile ./makefile
 
     printf "section .text\n    global _start\n\n_start:\n    mov rax,60\n    xor rdi,rdi\n    syscall" > ./src/main.asm
 
@@ -55,13 +55,13 @@ setASMFiles() {
            -e  's/LD\s*:=/LD        := ld/g'                                            \
            -e  's/COMPFLAGS/ASMFLAGS/g'                                                 \
            -e  's/ASMFLAGS\s*:=/ASMFLAGS  := -felf64/g'                                 \
-		   -e  's,LDFLAGS\s*:=,LDFLAGS   := -dynamic-linker '"$pathToLinker"' -lc,g'    \
+           -e  's,LDFLAGS\s*:=,LDFLAGS   := -dynamic-linker '"$pathToLinker"' -lc,g'    \
            -e  's/INCEXT\s*:=/INCEXT           := inc/g'                                \
            -e  's/SRCEXT\s*:=/SRCEXT           := asm/g'                                \
            -e  's/SRCFILES\s*:=/SRCFILES         := main.asm/g'                         \
-		   -e  's/-MMD/-MD/g'                                                           \
+           -e  's/-MMD/-MD/g'                                                           \
            -e  's/COMPILE/ASSEMBLE/g'                                                   \
-		   -e  's/ASSEMBLE           /ASSEMBLE          /g'                            ./makefile
+           -e  's/ASSEMBLE           /ASSEMBLE          /g'                            ./makefile
 }
 
 setFiles() {
@@ -78,43 +78,43 @@ setFiles() {
 setExecutableName() {
     read executableName
 
-	[[ ! $executableName =~ ^[a-zA-Z]+$ ]] && echo "ERROR: Invalid project name" && exit 1
+    [[ ! $executableName =~ ^[a-zA-Z]+$ ]] && echo "ERROR: Invalid project name" && exit 1
 
-	sed -i "s/TARGET\s*:=/TARGET    := $executableName/g" ./makefile
+    sed -i "s/TARGET\s*:=/TARGET    := $executableName/g" ./makefile
 }
 
 checkIfConfigured() {
-	[ ! -f "./makefile" ] && return
+    [ ! -f "./makefile" ] && return
 
-	echo -n "WARNING: This project is already configured. Do you want to reconfigure it? [Y/n]: "
-	read answer
+    echo -n "WARNING: This project is already configured. Do you want to reconfigure it? [Y/n]: "
+    read answer
 
-	if [[ $answer =~ ^(Y|y|yes)$ ]]; then
-		rm -f ./src/* ./include/* ./bin/*.o
-		cp ./.makefile ./makefile
-		return
-	fi
-	exit 0
+    if [[ $answer =~ ^(Y|y|yes)$ ]]; then
+        rm -f ./src/* ./include/* ./bin/*.o
+        cp ./.makefile ./makefile
+        return
+    fi
+    exit 0
 }
 
 setDirectories() {
-	[ ! -d "./src/" ] && mkdir src
-	[ ! -d "./include" ] && mkdir include
+    [ ! -d "./src/" ] && mkdir src
+    [ ! -d "./include" ] && mkdir include
 }
 
 main() {
     echo "Makefiles, v0.1"
 
-	checkIfConfigured
+    checkIfConfigured
 
-	setDirectories
+    setDirectories
 
     echo "Please enter the following information to configure your project"
     echo -n "  Project type: "
     setFiles
 
-	echo -n "  Executable name: "
-	setExecutableName
+    echo -n "  Executable name: "
+    setExecutableName
 
     echo "All done!"
 }
