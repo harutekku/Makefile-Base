@@ -100,7 +100,6 @@ checkIfConfigured() {
 setDirectories() {
     [ ! -d "./src/" ] && mkdir src
     [ ! -d "./include/" ] && mkdir include
-    [ ! -d "./dep/" ] && mkdir dep
 }
 
 main() {
