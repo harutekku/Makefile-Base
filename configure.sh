@@ -44,7 +44,7 @@ setASMFiles() {
 
 	pathToLinker=$(find / -name "ld-linux-x86-64.so.2" 2>/dev/null | head -n 1)
 
-	[ -n "$pathToLinker" ] && echo "ERROR: No suitable linker found" && exit 1
+	[ -z "$pathToLinker" ] && echo "ERROR: No suitable linker found" && exit 1
 
 	cp ./.makefile ./makefile
 
