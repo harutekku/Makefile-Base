@@ -90,7 +90,7 @@ checkIfConfigured() {
     read answer
 
     if [[ $answer =~ ^(Y|y|yes)$ ]]; then
-        rm -f ./src/* ./include/* ./bin/*.o
+        rm -f ./src/* ./include/* ./bin/*.o ./dep/*
         cp ./.makefile ./makefile
         return
     fi
@@ -99,7 +99,8 @@ checkIfConfigured() {
 
 setDirectories() {
     [ ! -d "./src/" ] && mkdir src
-    [ ! -d "./include" ] && mkdir include
+    [ ! -d "./include/" ] && mkdir include
+    [ ! -d "./dep/" ] && mkdir dep
 }
 
 main() {
