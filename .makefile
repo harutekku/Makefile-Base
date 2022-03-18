@@ -35,7 +35,7 @@ export TARGET    := # Target name
 # Final command
 #-----------------------------------------------------------
 COMPILE           = $(COMP) $(CPPFLAGS) $(DEPFLAGS) $(COMPFLAGS) 
-POSTCOMPILE       = mv -f $(DEPDIR)/$*.temp.d $(DEPDIR)/$*.d && touch $@
+POSTCOMPILE       = mv -f $(DEPDIR)/$*.temp.d $(DEPDIR)/$*.d && touch $(OBJDIR)/$@
 export LINK       = $(LD) $(LDFLAGS)
 
 # Paths
