@@ -8,7 +8,7 @@ export LD        := # Don't use LD unless you need to
 export COMPFLAGS := 
 export LDFLAGS   := 
 CPPFLAGS         := -I include
-DEPFLAGS          = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
+DEPFLAGS          = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.temp.d
 
 # Directories
 #-----------------------------------------------------------
@@ -35,6 +35,7 @@ export TARGET    := # Target name
 # Final command
 #-----------------------------------------------------------
 COMPILE           = $(COMP) $(CPPFLAGS) $(DEPFLAGS) $(COMPFLAGS) 
+POSTCOMPILE       = mv -f $(DEPDIR)/$*.temp.d $(DEPDIR)/$*.d && touch $@
 export LINK       = $(LD) $(LDFLAGS)
 
 # Paths
@@ -52,6 +53,8 @@ $(TARGET): $(OBJFILES)
 %.o: %.$(SRCEXT) $(DEPDIR)/%.d | $(DEPDIR)
 	@echo Compiling $@
 	@$(COMPILE) -o $(OBJDIR)/$@ $<
+	@echo Updating timestamps...
+	@$(POSTCOMPILE)
 
 $(DEPDIR): ; @mkdir -p $@
 
