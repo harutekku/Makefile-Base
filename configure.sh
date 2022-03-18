@@ -16,7 +16,8 @@ setCFiles() {
            -e  's/SRCEXT\s*:=/SRCEXT           := c/g'                                 \
            -e  's/SRCFILES\s*:=/SRCFILES         := main.c/g'                          \
            -e  's/COMPILE/COMPILE\.c/g'                                                \
-           -e  's/COMPILE\.c           /COMPILE\.c         /g'                        ./makefile
+           -e  's/COMPILE\.c           /COMPILE\.c         /g'                         \
+           -e  's/POSTCOMPILE.c       =/POSTCOMPILE.c     =/g'                        ./makefile
 }
 
 setCPPFiles() {
@@ -35,7 +36,8 @@ setCPPFiles() {
            -e  's/SRCEXT\s*:=/SRCEXT           := cpp/g'                                   \
            -e  's/SRCFILES\s*:=/SRCFILES         := main.cpp/g'                            \
            -e  's/COMPILE/COMPILE\.cpp/g'                                                  \
-           -e  's/COMPILE.cpp           /COMPILE\.cpp       /g'                           ./makefile
+           -e  's/COMPILE.cpp           /COMPILE\.cpp       /g'                            \
+           -e  's/POSTCOMPILE.cpp       =/POSTCOMPILE.cpp   =/g'                          ./makefile
 }
 
 
@@ -61,7 +63,8 @@ setASMFiles() {
            -e  's/SRCFILES\s*:=/SRCFILES         := main.asm/g'                         \
            -e  's/-MMD/-MD/g'                                                           \
            -e  's/COMPILE/ASSEMBLE/g'                                                   \
-           -e  's/ASSEMBLE           /ASSEMBLE          /g'                            ./makefile
+           -e  's/ASSEMBLE           /ASSEMBLE          /g'                             \
+           -e  's/POSTASSEMBLE       =/POSTASSEMBLE      =/g'                          ./makefile
 }
 
 setFiles() {
