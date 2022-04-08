@@ -1,14 +1,14 @@
 # Compiler & Linker
 #-----------------------------------------------------------
-export COMP      := 
-export LNK       := # Don't use LD unless you need to
+export ASM       := nasm
+export AR        := ar
 
 # Flags
 #-----------------------------------------------------------
-export COMPFLAGS := 
-export LNKFLAGS  := 
+export ASMFLAGS  := -felf64
+export ARFLAGS   := rv
 CPPFLAGS         := -I include
-DEPFLAGS          = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.temp.d
+DEPFLAGS          = -MT $@ -MD -MP -MF $(DEPDIR)/$*.temp.d
 
 # Directories
 #-----------------------------------------------------------
@@ -19,8 +19,8 @@ DEPDIR           := dep
 
 # File extensions
 #-----------------------------------------------------------
-INCEXT           :=
-SRCEXT           :=
+INCEXT           := inc
+SRCEXT           := asm
 
 # Files
 #-----------------------------------------------------------
@@ -30,13 +30,13 @@ DEPFILES         := $(SRCFILES:%.$(SRCEXT)=$(DEPDIR)/%.d)
 
 # Target
 #-----------------------------------------------------------
-export TARGET    := # Target name
+export TARGET    := lib.a
 
 # Final commands
 #-----------------------------------------------------------
-COMPILE           = $(COMP) $(CPPFLAGS) $(DEPFLAGS) $(COMPFLAGS) 
-POSTCOMPILE       = mv -f $(DEPDIR)/$*.temp.d $(DEPDIR)/$*.d && touch $(OBJDIR)/$@
-export LINK       = $(LNK) $(LNKFLAGS)
+ASSEMBLE          = $(ASM) $(CPPFLAGS) $(DEPFLAGS) $(ASMFLAGS) 
+POSTASSEMBLE      = mv -f $(DEPDIR)/$*.temp.d $(DEPDIR)/$*.d && touch $(OBJDIR)/$@
+export LINK       = $(AR) $(ARFLAGS)
 
 # Paths
 #-----------------------------------------------------------
@@ -52,9 +52,9 @@ $(TARGET): $(OBJFILES)
 %.o: %.$(SRCEXT)
 %.o: %.$(SRCEXT) $(DEPDIR)/%.d | $(DEPDIR)
 	@echo Compiling $@
-	@$(COMPILE) -o $(OBJDIR)/$@ $<
+	@$(ASSEMBLE) -o $(OBJDIR)/$@ $<
 	@echo Updating timestamps...
-	@$(POSTCOMPILE)
+	@$(POSTASSEMBLE)
 
 $(DEPDIR): ; @mkdir -p $@
 
