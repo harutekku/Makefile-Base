@@ -1,11 +1,22 @@
 #!/bin/bash
 
-# TODO:
-#   Add `--help`
-#   Add tests at the beginning checking for compilers
-#   Add command-line switches
-#   Add an option to create files
-#   Change bash regex `if`s to `grep` tests
+printHelp() {
+    echo -e "Makefiles v0.1.1\n"                                                                             \
+            "\rUsage: ./configure.sh [--help]\n\n"                                                           \
+            "\rDescription:\n"                                                                               \
+            "\rConfigure the current directory for C, C++ or NASM project\n"                                 \
+            "\rIn order for the configuration process to succeed,"                                           \
+            "you need to specify the following parameters:\n"                                                \
+            "\r- Project type:\n"                                                                            \
+            "\r    LIB if you want to create a library or EXE if you want to build executable\n"             \
+            "\r- Project language:\n"                                                                        \
+            "\r    C for C project, CPP for C++ one and ASM for NASM-based solution\n"                       \
+            "\r- Target name:\n"                                                                             \
+            "\r    The name of the final library/executable. Allowed names only include ASCII\n"             \
+            "\r    characters and dots for specifying extensions\n\n"                                        \
+            "\rAuthor:\n"                                                                                    \
+            "\rHarutekku"
+}
 
 setForC() {
     sed -i -e  's|\bCOMP\b|CC|g'                                                          \
@@ -94,7 +105,7 @@ setProjectType() {
 setTargetName() {
     read targetName
 
-    [[ ! $targetName =~ ^[\.a-zA-Z]+$ ]] && echo "ERROR: Invalid project name" && exit 1
+    [[ ! $targetName =~ ^[\.a-zA-Z]+$ ]] &&  echo "ERROR: Invalid project name" && exit 1
 
     sed -i "s|TARGET\s*:=.*$|TARGET    := $targetName|g" ./makefile
 }
@@ -137,5 +148,7 @@ main() {
 
     echo "All done!"
 }
+
+[ "$1" = "--help" ] && printHelp && exit 1
 
 main
