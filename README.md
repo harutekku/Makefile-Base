@@ -29,7 +29,7 @@
 ## Build system
 ### General info
 - Uses `make` by default with automatic dependency generation
-- The GNU compilers are the default compilers - can be switched to `clang` or other compiles that support
+- The GNU compilers are the default compilers - can be switched to `clang` or other compilers that support
   dependency generation
 - The Netwide Assembler is the default assembler for x86-64 assembly projects - can probably be switched to 
   other assemblers as well if they support dependency generation
@@ -40,18 +40,18 @@
 ### Variables
 - You can customize several variables in the `makefile`
 
-| Flag           | Description                                   |   
-|----------------|-----------------------------------------------|
-| `C__`/`ASM`    | Which compiler/assembler to use               |
-| `LD`           | Which linker to use                           |
-| `___FLAGS`     | What compiler/assembler flags to pass         |
-| `LDFLAGS`      | What linker flags to pass                     |
-| `CPPFLAGS`     | What preprocessor flags to pass               |
-| `DEPFLAGS`     | What flags to pass for dependency generation  |
-| `OBJDIR`       | Where to place object files                   |
-| `DEPDIR`       | Where to place generated the dependency files |
-| `SRCFILES`     | What are the source files                     |
-| `TARGET`       | What's the name of the final executable       |
+| Flag           | Description                           |
+|----------------|---------------------------------------|
+| `C__`/`ASM`    | Compiler/assembler                    |
+| `LD`           | Linker                                |
+| `___FLAGS`     | Compiler/assembler flags              |
+| `LDFLAGS`      | Linker flags                          |
+| `CPPFLAGS`     | Preprocessor flags                    |
+| `DEPFLAGS`     | Flags for dependency generation       |
+| `OBJDIR`       | Output directory for object files     |
+| `DEPDIR`       | Output directory for dependency files |
+| `SRCFILES`     | Source files                          |
+| `TARGET`       | Name of the final executable          |
 
 # Author
 - [Harutekku](https://github.com/harutekku)
