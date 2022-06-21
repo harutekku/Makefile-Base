@@ -24,9 +24,9 @@ SRCEXT           :=
 
 # Modules
 #-----------------------------------------------------------
-export SRCFILES  := # Other modules will append to this
+export SRCFILES  := # Each module will append to this
 MODULES          := # Modules
-include $(patsubst %,/src/%/module.mk, $(MODULES))
+include $(patsubst %,$(SRCDIR)/%/module.mk,$(MODULES))
 
 # Build files
 #-----------------------------------------------------------
@@ -54,8 +54,8 @@ vpath %.o           $(OBJDIR)
 $(TARGET): $(OBJFILES)
 	make --directory=$(OBJDIR)/
 
-.SECO
-%.o: %.$(SRCEXT) $(DEPDIR)/%.d | $(DEPDIR)
+.SECONDEXPANSION:
+%.o: $$(subst .,/,%).$(SRCEXT) $(DEPDIR)/%.d | $(DEPDIR)
 	@echo Compiling $@
 	@$(COMPILE) -o $(OBJDIR)/$@ $<
 	@echo Updating timestamps...
