@@ -22,11 +22,16 @@ DEPDIR           := dep
 INCEXT           :=
 SRCEXT           :=
 
-# Files
+# Modules
 #-----------------------------------------------------------
-SRCFILES         := # Source files
-export OBJFILES  := $(SRCFILES:%.$(SRCEXT)=%.o)
-DEPFILES         := $(SRCFILES:%.$(SRCEXT)=$(DEPDIR)/%.d)
+export SRCFILES  := # Other modules will append to this
+MODULES          := # Modules
+include $(patsubst %,/src/%/module.mk, $(MODULES))
+
+# Build files
+#-----------------------------------------------------------
+export OBJFILES  := $(subst /,.,$(SRCFILES:%.$(SRCEXT)=%.o))
+DEPFILES         := $(patsubst %,$(DEPDIR)/%.d,$(subst /,.,$(basename $(SRCFILES))))
 
 # Target
 #-----------------------------------------------------------
@@ -49,7 +54,7 @@ vpath %.o           $(OBJDIR)
 $(TARGET): $(OBJFILES)
 	make --directory=$(OBJDIR)/
 
-%.o: %.$(SRCEXT)
+.SECO
 %.o: %.$(SRCEXT) $(DEPDIR)/%.d | $(DEPDIR)
 	@echo Compiling $@
 	@$(COMPILE) -o $(OBJDIR)/$@ $<
