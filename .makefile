@@ -54,6 +54,7 @@ vpath %.o           $(OBJDIR)
 $(TARGET): $(OBJFILES)
 	make --directory=$(OBJDIR)/
 
+%.o: %.$(SRCEXT)
 .SECONDEXPANSION:
 %.o: $$(subst .,/,%).$(SRCEXT) $(DEPDIR)/%.d | $(DEPDIR)
 	@echo Compiling $@
